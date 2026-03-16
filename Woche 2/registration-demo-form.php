@@ -50,8 +50,13 @@ if( isset($_POST['name']) && isset($_POST['email']) && isset($_POST['password'])
 
 
    // Passwort prüfen nach bestimmten regeln (TODO)
+   $minUpper = "/^(?:.*[A-Z]){1,}/"; // minimum 1 Grossbuchstaben
+   $minLower = "/^(?:.*[a-z]){1,}/"; // minimum 1 Kleinbuchstaben
+   $minDigits = "/^(?:.*[0-9]){1,}/"; // minimum 1 Ziffer
+   $minSpecial = "/^(?:[\w\s]*[^\w\s]){1,}/"; // minimum 1 Sonderzeichen
+   $noSpace = "/^\S+$/";
 
-
+   
    // kann man das Formular verarbeiten?
    if( $hasError == false){
       // kein fehler gefunden - verarbeiten (TODO)
