@@ -13,10 +13,21 @@ echo "</pre>";
 $hasError = false; // status-Variable für die Entscheidung nach der Validierung, ob das Formular verarbeitet werden kann.
 $messages = array(); // Message-Sammelcontainer für die Ausgabe der Fehlermeldungen im HTML
 
+// initialzustand der Datenvariablen
+$name = '';
+$email = '';
+$password = '';
+$country = '';
+$gender = '';
+$interests = array();
+$aboutme = '';
 
 // Prüfen, ob das Formualr schon abgeschickt wurde:
 if( isset($_POST['name']) && isset($_POST['email']) && isset($_POST['password']) ){
    echo 'wir sind ready für die Validierung';
+
+   $name = $_POST['name']; // datenvariable überschreiben
+   $country = $_POST['country']; 
 
    // Pflichfelder prüfen
    if( empty($_POST['name']) ){
@@ -35,6 +46,12 @@ if( isset($_POST['name']) && isset($_POST['email']) && isset($_POST['password'])
       $hasError = true;
    }
 
+   if( !isset( $_POST['gender'] ) ){
+      // radiobuttons existieren nicht, wenn keiner angewählt wurde
+      $messages[] =  'Bitte wählen Sie ein Geschlecht';
+      $hasError = true;
+   }
+
 
    // email format prüfen - https://www.php.net/manual/en/function.filter-var.php
    $validEmail = filter_var( $_POST['email'], FILTER_VALIDATE_EMAIL);
@@ -46,16 +63,56 @@ if( isset($_POST['name']) && isset($_POST['email']) && isset($_POST['password'])
    }
 
 
-   // Länge des Namens prüfen (TODO)
+   // Länge des Namens prüfen - strlen() gibt anzahl Zeichen des Strings zurück
+   if( strlen( $_POST['name'] )<4 ){
+      // Name zu kurz
+      $messages[] =  'Der Name muss mindestens 4 Zeichen enthalten';
+      $hasError = true;
+   }
+
+   // Länge des Passworts prüfen
+   if( strlen( $_POST['password'] )<8 ){
+      // Name zu kurz
+      $messages[] =  'Das Passwort muss mindestens 8 Zeichen enthalten';
+      $hasError = true;
+   }
 
 
    // Passwort prüfen nach bestimmten regeln (TODO)
+   // testen und erklären lassen auf: https://regex101.com/
    $minUpper = "/^(?:.*[A-Z]){1,}/"; // minimum 1 Grossbuchstaben
    $minLower = "/^(?:.*[a-z]){1,}/"; // minimum 1 Kleinbuchstaben
    $minDigits = "/^(?:.*[0-9]){1,}/"; // minimum 1 Ziffer
    $minSpecial = "/^(?:[\w\s]*[^\w\s]){1,}/"; // minimum 1 Sonderzeichen
    $noSpace = "/^\S+$/";
 
+   if( preg_match($minUpper, $_POST['password']) == 0 ){
+      // zu wenig Grossbuchstaben
+      $messages[] =  'Das Passwort muss mindestens 1 Grossbuchstaben enthalten';
+      $hasError = true;
+   }
+   if( preg_match($minLower, $_POST['password']) == 0 ){
+      // zu wenig Kleinbuchstaben
+      $messages[] =  'Das Passwort muss mindestens 1 Kleinbuchstaben enthalten';
+      $hasError = true;
+   }
+   if( preg_match($minDigits, $_POST['password']) == 0 ){
+      // zu wenig Zahlen
+      $messages[] =  'Das Passwort muss mindestens 1 Zahl enthalten';
+      $hasError = true;
+   }
+   if( preg_match($minSpecial, $_POST['password']) == 0 ){
+      // zu wenig Sonderzeichen
+      $messages[] =  'Das Passwort muss mindestens 1 Sonderzeichen enthalten';
+      $hasError = true;
+   }
+   if( preg_match($noSpace, $_POST['password']) == 0 ){
+      // Leerueichen gefunden
+      $messages[] =  'Das Passwort darf keine Leerzeichen enthalten';
+      $hasError = true;
+   }
+   // var_dump( $upperTest ); // was ist in dieser Variable?
+   // print_r($matches);
    
    // kann man das Formular verarbeiten?
    if( $hasError == false){
@@ -89,23 +146,24 @@ if( isset($_POST['name']) && isset($_POST['email']) && isset($_POST['password'])
 
             <!-- Text -->
             <div class="uk-margin">
-               <label class="uk-form-label">Name</label>
+               <label class="uk-form-label">Name *</label>
                <div class="uk-form-controls">
-                  <input class="uk-input" type="text" name="name">
+                  <input class="uk-input" type="text" name="name" value="<?= $name ?>">
                </div>
             </div>
             <!-- Email -->
             <div class="uk-margin">
-               <label class="uk-form-label">E-Mail</label>
+               <label class="uk-form-label">E-Mail *</label>
                <div class="uk-form-controls">
                   <input class="uk-input" type="text" name="email">
                </div>
             </div>
             <!-- Passwort -->
             <div class="uk-margin">
-               <label class="uk-form-label">Passwort</label>
+               <label class="uk-form-label">Passwort *</label>
                <div class="uk-form-controls">
                   <input class="uk-input" type="password" name="password">
+                  <br><small>Das Passwort muss mindestens 1 Grossbuchstaben, 1 Kleinbuchstaben, 1 Sonderzeichen und 1 Zahl enthalten, und mindestens 8 Zeichen lang sein.</small>
                </div>
             </div>
             <!-- Select -->
@@ -114,15 +172,15 @@ if( isset($_POST['name']) && isset($_POST['email']) && isset($_POST['password'])
                <div class="uk-form-controls">
                   <select class="uk-select" name="country">
                      <option value="">Bitte wählen</option>
-                     <option value="de">Deutschland</option>
-                     <option value="ch">Schweiz</option>
-                     <option value="at">Österreich</option>
+                     <option value="de" <?php echo ($country == 'de')? 'selected':''; ?>>Deutschland</option>
+                     <option value="ch" <?php echo ($country == 'ch')? 'selected':''; ?>>Schweiz</option>
+                     <option value="at" <?php echo ($country == 'at')? 'selected':''; ?>>Österreich</option>
                   </select>
                </div>
             </div>
             <!-- Radio -->
             <div class="uk-margin">
-               <label class="uk-form-label">Geschlecht</label>
+               <label class="uk-form-label">Geschlecht *</label>
                <div class="uk-form-controls">
                   <label><input class="uk-radio" type="radio" name="gender" value="male"> Männlich</label><br>
                   <label><input class="uk-radio" type="radio" name="gender" value="female"> Weiblich</label><br>
