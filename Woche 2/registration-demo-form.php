@@ -6,9 +6,11 @@
  */
 
 // Monitor für POST Daten
+/*
 echo "<pre> POST Daten:";
 print_r($_POST);
 echo "</pre>";
+*/
 
 $hasError = false; // status-Variable für die Entscheidung nach der Validierung, ob das Formular verarbeitet werden kann.
 $messages = array(); // Message-Sammelcontainer für die Ausgabe der Fehlermeldungen im HTML
@@ -26,8 +28,13 @@ $aboutme = '';
 if( isset($_POST['name']) && isset($_POST['email']) && isset($_POST['password']) ){
    echo 'wir sind ready für die Validierung';
 
-   $name = $_POST['name']; // datenvariable überschreiben
-   $country = $_POST['country']; 
+   // Bereinigen / Sanitizing - immer ausser Passwort!!!
+   $name = strip_tags( $_POST['name'] ); // datenvariable überschreiben
+   $country = strip_tags( $_POST['country'] );
+
+   // Für Felder, die einige HTML Tags erlauben, kann strip_tags erweitert werden:
+   $allowed_tags = array('strong', 'b', 'i', 'em'); // einige Tags zulassen
+   $aboutme = strip_tags( $_POST['aboutme'], $allowed_tags );
 
    // Pflichfelder prüfen
    if( empty($_POST['name']) ){
@@ -200,7 +207,7 @@ if( isset($_POST['name']) && isset($_POST['email']) && isset($_POST['password'])
             <div class="uk-margin">
                <label class="uk-form-label">Über mich</label>
                <div class="uk-form-controls">
-                  <textarea class="uk-textarea" name="aboutme" rows="4"></textarea>
+                  <textarea class="uk-textarea" name="aboutme" rows="4"><?php echo $aboutme ?></textarea>
                </div>
             </div>
             <!-- Datei -->
