@@ -3,6 +3,7 @@ require_once('config.php'); // Seitenweite Werte nur einmal anpassen
 
 // HTML Header vorbereiten
 $pageTitle = "Nico's Portfolio | Contact";
+
 ?>
 <!DOCTYPE html>
 <html lang="en-gb" dir="ltr" vocab="http://schema.org/">
