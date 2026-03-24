@@ -1,5 +1,17 @@
 <?php
 require_once('config.php'); // Seitenweite Werte nur einmal anpassen
+require_once('library/functions.validate.php'); // Validierungsfunktionen einbinden
+
+// Demo für die PW Validierungsfunktion: 
+$testPW = 'AtesT1234!';
+$pwgueltig = validate_password( $testPW );
+
+if($pwgueltig === true){ // === vergleicht nicht nur den Wert (ungenau), sondern auch den typ (hier bool oder array)
+	echo $testPW.' ist gültig';
+}else{
+	echo $testPW.'ist ungültig<br>';
+	echo implode('<br>', $pwgueltig);
+}
 
 // HTML Header vorbereiten
 $pageTitle = "Nico's Portfolio | Contact";

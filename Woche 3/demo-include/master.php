@@ -1,5 +1,5 @@
 <?php
-// Master datei, die einbinden wird
+// Master datei, die einbinden wird (wird nicht selbst eingebunden)
 
 echo '<pre>';
 print_r( $_SERVER );
