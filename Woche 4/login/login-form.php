@@ -1,4 +1,24 @@
-<!DOCTYPE html>
+<?php
+session_start();
+// Demo User:
+$gespeicherterUser = 'terry@bytekultur.net';
+$gespeichertesPW = 'test1234';
+
+// Wenn Formular abgeschickt - prüfen
+if( isset($_POST['username']) && isset($_POST['password']) ){
+    if( $_POST['username'] == $gespeicherterUser && $_POST['password'] == $gespeichertesPW ){
+        // user hat sich korrekt authentifiziert
+
+        $_SESSION['loginstatus'] = 'loggedin';
+        header("location: admin-area.php"); // umleitung zur admin area
+    }else{
+        $errorMessage = 'Logindaten waren nicht korrekt';
+    }
+}
+
+// Erfolgreich eingeloggt - loginstatus merken
+
+?><!DOCTYPE html>
 <html>
 <head>
     <title>Login Form</title>

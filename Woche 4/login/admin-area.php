@@ -1,3 +1,30 @@
+<?php
+session_start();
+$isLoggedin = false;
+
+// Prüfen, ob Session existiert (User eingeloggt)
+if( isset($_SESSION['loginstatus']) && $_SESSION['loginstatus'] == 'loggedin' ){
+    // user ist eingeloggt
+    $isLoggedin = true;
+}
+
+// user will sich ausloggen, er hat den "logout" link angeklickt
+if(isset($_GET['logout'])){
+    // Loginstatus zurücksetzen
+    unset($_SESSION['loginstatus']); // position wird aus session gelöscht
+    $isLoggedin = false;
+}
+
+// Keine Session: Umleitung und Abbruch
+if($isLoggedin == false){
+    header("location: login-form.php"); // umleitung
+    exit(); // parser beendet das lesen
+}
+
+echo '<pre>';
+print_r($_SESSION);
+echo '</pre>';
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -67,7 +94,7 @@
             <strong>Adminbereich</strong>
         </div>
         <div class="inner flex-right">
-            <a class="button" href="geschuetzter-bereich.php?logout=true">Logout</a>
+            <a class="button" href="admin-area.php?logout=true">Logout</a>
         </div>
     </div>
     <div class="container-lg">
