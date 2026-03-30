@@ -1,8 +1,8 @@
 <?php
 // Config Datei für das ganze Projekt
-define('BASEURL', 'http://localhost/WDD325-PHP/Woche%203/nicos-portfolio/'); // Konstante definieren mit einem fixen Wert
+define('BASEURL', 'http://localhost/WDD325-PHP/Projekt/'); // Konstante definieren mit einem fixen Wert
 define('MEDIAFOLDER', 'media'); // Ordner für Projekte
-define('DOCUMENT_ROOT', $_SEVER['DOCUMENT_ROOT'].'WDD325-PHP/Woche%203/nicos-portfolio/');
+define('DOCUMENT_ROOT', $_SERVER['DOCUMENT_ROOT'].'WDD325-PHP/Projekt/');
 
 // Passwortregeln
 define('PW_MIN_UPPER', 3); // Anzahl Grossbuchstaben
