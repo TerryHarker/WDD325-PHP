@@ -6,7 +6,6 @@
 		html {
 			font-family: 'Open Sans', sans-serif;
 			font-size: 17px;
-			font-weight: 300;
 			line-height: 1.714;
 		}
 		h1, h2, h3 {
@@ -15,7 +14,7 @@
 		.box {
 			border:1px solid grey;
 			background:#dddddd;
-			display:inline-block;
+			display:block;
 			padding:10px 20px;
 		}
 		
@@ -61,8 +60,14 @@
 if(isset($_POST['passwort'])){
 	$passwort = $_POST['passwort'];
 	$hs = password_hash($passwort, PASSWORD_DEFAULT);
+	$verify = password_verify($passwort, $hs);
+	$verifyfalse = password_verify('anderesPW', $hs);
+	
 	echo '<p>Das Passwort "<strong>'.$passwort.'</strong>" hat folgenden Hash ergeben: </p>';
 	echo '<p class="box"><strong>'.$hs.'</strong></p>';
+	echo '<p class="box">password_verify(<strong>'.$passwort.'</strong>, '.$hs.') ergibt: <strong>'.(($verify==true)? 'true':'false').'</strong></p>';
+	echo '<p class="box">password_verify(<strong>anderesPW</strong>, '.$hs.') ergibt: <strong>'.(($verifyfalse==true)? 'true':'false').'</strong></p>';
+	
 }else{
 	echo 'gebe ein Passwort ein...';
 }
