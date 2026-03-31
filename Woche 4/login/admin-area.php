@@ -1,11 +1,34 @@
 <?php
+require_once('config.php');
+
+session_name(SESSION_NAME);
 session_start();
-$isLoggedin = false;
+$isLoggedin = true; 
 
 // Prüfen, ob Session existiert (User eingeloggt)
-if( isset($_SESSION['loginstatus']) && $_SESSION['loginstatus'] == 'loggedin' ){
+if( !isset($_SESSION['loginstatus']) || $_SESSION['loginstatus'] != 'loggedin' ){
     // user ist eingeloggt
-    $isLoggedin = true;
+    $isLoggedin = false;
+}
+
+// Prüfen, ob die aktuelle User IP mit der IP aus dem Login übereinstimmt
+if(!isset($_SESSION['login_userip']) || $_SESSION['login_userip'] != $_SERVER['REMOTE_ADDR']){
+    // user ip stimmt nicht überein
+    $isLoggedin = false;
+}
+
+// Prüfen, ob aktueller Useragent mit gespeichertem übereinstimmt
+if(!isset($_SESSION['login_useragent']) || $_SESSION['login_useragent'] != $_SERVER['HTTP_USER_AGENT']){
+    // user ip stimmt nicht überein
+    $isLoggedin = false;
+}
+
+// Prüfen, ob die Session zu lange inaktiv war
+$aktuelleZeit = time(); // Zeit jetzt in Sekunen
+$sessionLifetime = SESSION_LIFETIME*60; // Gültigkeit in Sekunden
+if( $aktuelleZeit - $_SESSION['last_activity'] > $sessionLifetime ){
+    // zu lange inaktiv
+    $isLoggedin = false;
 }
 
 // user will sich ausloggen, er hat den "logout" link angeklickt
@@ -21,7 +44,13 @@ if($isLoggedin == false){
     exit(); // parser beendet das lesen
 }
 
+// erneuern
+$_SESSION['last_activity'] = time(); // Timestamp erneuern
+session_regenerate_id(); // erneuert die SessionID (wert des session cookies)
+
+
 echo '<pre>';
+echo $_COOKIE['PHPSESSID']."\n";
 print_r($_SESSION);
 echo '</pre>';
 ?>

@@ -1,20 +1,34 @@
 <?php
+require_once('config.php');
+
+session_name(SESSION_NAME); // Name des session cookies - vor session_start()!
 session_start();
-// Demo User:
+// Demo User - mit gehashtem PW - nicht rekonstruierbar
 $gespeicherterUser = 'terry@bytekultur.net';
-$gespeichertesPW = 'test1234';
+$gespeichertesPW = '$2y$10$w76FPD1pxTlBG2Rli1iL2O2IljEVmz0SYt0haa/Lgx.WYHzL0U3kW'; // 'test1234'
+// echo password_hash($gespeichertesPW, PASSWORD_DEFAULT);
 
 // Wenn Formular abgeschickt - prüfen
 if( isset($_POST['username']) && isset($_POST['password']) ){
-    if( $_POST['username'] == $gespeicherterUser && $_POST['password'] == $gespeichertesPW ){
+    if( 
+        $_POST['username'] == $gespeicherterUser &&  
+        password_verify($_POST['password'], $gespeichertesPW) === true
+    ){
         // user hat sich korrekt authentifiziert
 
         $_SESSION['loginstatus'] = 'loggedin';
+        $_SESSION['login_userip'] = $_SERVER['REMOTE_ADDR']; // IP des Users zum Zeitpunkt des Logins
+        $_SESSION['login_useragent'] = $_SERVER['HTTP_USER_AGENT']; // UA zum Zeitpunkt des Logins
+
+        $_SESSION['last_activity'] = time();
+
         header("location: admin-area.php"); // umleitung zur admin area
     }else{
         $errorMessage = 'Logindaten waren nicht korrekt';
     }
 }
+
+session_regenerate_id(); // erneuert die SessionID (wert des session cookies)
 
 // Erfolgreich eingeloggt - loginstatus merken
 
