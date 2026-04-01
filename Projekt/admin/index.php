@@ -1,6 +1,8 @@
 <?php
 require_once('../config.php');
+session_name(SESSION_NAME);
 session_start();
+$debug = defined('DISPLAY_DEBUG')===true ? DISPLAY_DEBUG:false;
 
 $page = 'dashboard'; // default page
 if( !empty($_GET['page']) ){
@@ -8,26 +10,56 @@ if( !empty($_GET['page']) ){
 }
 
 // Login Check ****************************
-$isLoggedin = false;
+$isLoggedin = true; 
 
 // Prüfen, ob Session existiert (User eingeloggt)
-if( isset($_SESSION['loginstatus']) && $_SESSION['loginstatus'] == 'loggedin' ){
-	// user ist eingeloggt
-    $isLoggedin = true;
-	}
-	
-	// user will sich ausloggen, er hat den "logout" link angeklickt
-	if(isset($_GET['logout'])){
-		// Loginstatus zurücksetzen
-		unset($_SESSION['loginstatus']); // position wird aus session gelöscht
-		$isLoggedin = false;
-		}
+if( !isset($_SESSION['loginstatus']) || $_SESSION['loginstatus'] != 'loggedin' ){
+    // user ist eingeloggt
+	echo $debug == true ? '<br>loginstatus fehlt in session':'';
+    $isLoggedin = false;
+}
+
+// Prüfen, ob die aktuelle User IP mit der IP aus dem Login übereinstimmt
+if(!isset($_SESSION['login_userip']) || $_SESSION['login_userip'] != $_SERVER['REMOTE_ADDR']){
+    // user ip stimmt nicht überein
+	echo $debug == true ? '<br>IP fehlt oder stimmt nicht überein':'';
+    $isLoggedin = false;
+}
+
+// Prüfen, ob aktueller Useragent mit gespeichertem übereinstimmt
+if(!isset($_SESSION['login_useragent']) || $_SESSION['login_useragent'] != $_SERVER['HTTP_USER_AGENT']){
+    // user ip stimmt nicht überein
+	echo $debug == true ? '<br>Useragent fehlt oder stimmt nicht überein':'';
+    $isLoggedin = false;
+}
+
+// Prüfen, ob die Session zu lange inaktiv war
+$aktuelleZeit = time(); // Zeit jetzt in Sekunen
+$sessionLifetime = SESSION_LIFETIME*60; // Gültigkeit in Sekunden
+if( empty($_SESSION['last_activity']) || $aktuelleZeit - $_SESSION['last_activity'] > $sessionLifetime ){
+    // zu lange inaktiv
+	echo $debug == true ? '<br>Zu lange inaktiv':'';
+    $isLoggedin = false;
+}
+
+// user will sich ausloggen, er hat den "logout" link angeklickt
+if(isset($_GET['logout'])){
+    // Loginstatus zurücksetzen
+    $isLoggedin = false;
+}
 		
-		// Keine Session und nicht Seite login: Umleitung und Abbruch
-		if($isLoggedin == false && $page != 'login'){
-			header("location: index.php?page=login"); // umleitung
-			exit(); // parser beendet das lesen
-		}
+// Keine Session und nicht Seite login: Umleitung und Abbruch
+if($isLoggedin == false && $page != 'login'){
+    unset($_SESSION['loginstatus']); // position wird aus session gelöscht
+	if($debug == false){
+		header("location: index.php?page=login"); // umleitung
+	}
+	exit(); // parser beendet das lesen
+}
+
+// erneuern nach prüfen
+$_SESSION['last_activity'] = time(); // Timestamp erneuern
+session_regenerate_id(); // erneuert die SessionID (wert des session cookies)
 // Login Check ende ****************************
 
 
