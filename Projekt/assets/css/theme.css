@@ -45,3 +45,12 @@ a:hover, a:active,
 }
 
 .row > div img { max-width:100%; }
+
+.btn-primary {
+    background-color: #000;
+    border-color: #000;
+}
+.btn-primary:hover {
+    background-color: #333;
+    border-color: #333;
+}
