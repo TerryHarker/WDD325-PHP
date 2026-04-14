@@ -1,18 +1,20 @@
 <?php
-// Demo User:
-$gespeicherterUser = 'terry@bytekultur.net';
-$pwhash = '$2y$10$w76FPD1pxTlBG2Rli1iL2O2IljEVmz0SYt0haa/Lgx.WYHzL0U3kW'; // 'test1234'
-
 
 // Wenn Formular abgeschickt - prüfen
 if( isset($_POST['username']) && isset($_POST['password']) ){
-    if( 
-        $_POST['username'] == $gespeicherterUser &&  
-        password_verify($_POST['password'], $pwhash) === true
+    // User aus der Datenbank lesen anhand des Usernamens (email)
+    $query = "SELECT `name`, `passwort` FROM `user` WHERE email=?";
+    $statement = $db->prepare( $query ); // auzuführender Befehl
+    $statement->execute( [$_POST['username']] ); // Daten schicken und ausführen
+    $userdata = $statement->fetch( PDO::FETCH_ASSOC ); // Datenabholen
+    print_r($userdata);
+if( 
+        $userdata !==false && 
+        password_verify($_POST['password'], $userdata['passwort']) === true
     ){
         // Erfolgreich eingeloggt - loginstatus merken
         $_SESSION['loginstatus'] = 'loggedin';
-        $_SESSION['loginstatus'] = 'loggedin';
+        $_SESSION['username'] = $userdata['name'];
         $_SESSION['login_userip'] = $_SERVER['REMOTE_ADDR']; // IP des Users zum Zeitpunkt des Logins
         $_SESSION['login_useragent'] = $_SERVER['HTTP_USER_AGENT']; // UA zum Zeitpunkt des Logins
         $_SESSION['last_activity'] = time();

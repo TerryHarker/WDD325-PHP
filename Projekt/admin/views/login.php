@@ -11,8 +11,8 @@
             ?>
             <form method="POST" action="">
                 
-                <label for="username"><b>Username</b></label>
-                <input type="text" placeholder="Benutzernamen eingeben" name="username" required>
+                <label for="username"><b>E-Mail</b></label>
+                <input type="text" placeholder="E-Mail eingeben" name="username" required>
                 <br>
                 <label for="password"><b>Password</b></label>
                 <input type="password" placeholder="Passwort eingeben" name="password" required>

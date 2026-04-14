@@ -19,5 +19,9 @@ define('SESSION_LIFETIME', 15); // Sessiongültigkeit bei inaktivität (Minuten)
 // SEO
 define('DEFAULT_PAGETITLE', 'Nicos HTML Page'); // Standard SEO Page Title, wenn keiner definiert wurde
 
-// Datenbank...
+// Datenbank
+define('DB_SERVER', 'localhost'); // Server, meist localhost oder der Servername von deinem Hoster
+define('DB_USER', 'root'); // DB User - für Produktiv einen eigenen erstellen
+define('DB_PASSWORD', ''); // PW des DB Users - für Produktiv eigenes erstellen
+define('DB_NAME', 'wdd0325-nico'); // deine DB
 ?>

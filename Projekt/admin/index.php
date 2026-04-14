@@ -9,6 +9,16 @@ if( !empty($_GET['page']) ){
 	$page = $_GET['page'];
 }
 
+// Datenbankverbindung aufbauen
+try {
+    $db = new PDO("mysql:host=".DB_SERVER.';dbname='.DB_NAME, DB_USER, DB_PASSWORD);
+    // var_dump($db);
+}catch ( PDOException $exception ){
+    // print_r($exception);
+
+    die('verbindung hat nicht funktioniert');
+}
+
 // Login Check ****************************
 $isLoggedin = true; 
 

@@ -6,6 +6,17 @@ if( !empty($_GET['page']) ){
 	$page = $_GET['page'];
 }
 
+// Datenbankverbindung
+try {
+    $db = new PDO("mysql:host=".DB_SERVER.';dbname='.DB_NAME, DB_USER, DB_PASSWORD);
+    // var_dump($db);
+}catch ( PDOException $exception ){
+    // print_r($exception);
+
+    die('verbindung hat nicht funktioniert');
+}
+
+
 // Wenn im Ordner "scripts" eine datei passend zum $page parameter existiert, wird sie hier eingebunden
 if( is_file("scripts/".$page.".php") == true ){
 	include("scripts/".$page.".php"); 

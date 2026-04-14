@@ -2,7 +2,7 @@
 	<div class="container">
 		
 		<div class="mt-5">
-				<h2>Aktuelle Projekte</h2>
+			<h2>Aktuelle Projekte</h2>
 		</div>
 		<div class="row mt-4 mb-5">
 			<div class="col-12 col-sm-6 col-md-3 mb-4">
