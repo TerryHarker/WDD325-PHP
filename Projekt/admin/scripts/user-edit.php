@@ -4,9 +4,14 @@ $id = '';
 $name = '';
 $email = '';
 
+$isNew = true; // neuer Datensatz
 
-// 2. Schritt: speichern (UPDATE)
+// 2. Schritt: Userdaten aus Formular speichern (INSERT oder UPDATE)
 if(isset($_POST['id'])){
+
+    if(!empty($_POST['id'])){
+        $isNew = false; // ID gefunden - kein neuer Eintrag
+    }
 
     // sanitizing / Vorbereiten der Variablen
     $id = (int)$_POST['id'];
@@ -16,31 +21,43 @@ if(isset($_POST['id'])){
     
     // validierung würde hier hinkommen... s. validierung woche 2
     
-    
-    // Update query
-    $updateQ = "UPDATE `user`SET `name`= ?, `email`=?"; 
-    $values = array($name, $email);
+    if($isNew){
+        // Insert query
+        // $insertQ = "INSERT INTO `user` (ID, name, email, passwort, aktiv) VALUES (NULL, ?, ?, ?, 1)";
+        $insertQ = "INSERT INTO `user` (`name`,`email`,`passwort`,`aktiv`) VALUES (?, ?, ?, 1)";
+        $passwort_hash = password_hash( $passwort, PASSWORD_DEFAULT );
+        $values = array($name, $email, $passwort_hash);
 
-    // Passwort wird nur geändert, wenn es nicht leer ist
-    if(!empty($passwort)){
-        $passwort_hash = password_hash( $_POST['passwort'], PASSWORD_DEFAULT );
-        $updateQ .= ", `passwort`=?";
-        $values[] = $passwort_hash;
-        
-    }
-    $updateQ .=" WHERE id=?";
-    $values[] = $id;
+        $statement = $db->prepare($insertQ);
+        $saved = $statement->execute( $values );
+    }else{
     
-    $statement = $db->prepare( $updateQ );
-    $updated = $statement->execute( $values );
-    // var_dump($updated);
+        // Update query
+        $updateQ = "UPDATE `user`SET `name`= ?, `email`=?"; 
+        $values = array($name, $email);
+
+        // Passwort wird nur geändert, wenn es nicht leer ist
+        if(!empty($passwort)){
+            // Passwort validieren, wenn es mitgeschickt wurde!
+            $passwort_hash = password_hash( $_POST['passwort'], PASSWORD_DEFAULT );
+            $updateQ .= ", `passwort`=?";
+            $values[] = $passwort_hash;
+            
+        }
+        $updateQ .=" WHERE id=?";
+        $values[] = $id;
+        
+        $statement = $db->prepare( $updateQ );
+        $updated = $statement->execute( $values );
+        // var_dump($updated);
+    }
 
     // umleiten zur Liste: 
     header("Location: index.php?page=user-list");
 }
 
 
-// 1. Schritt: lesen
+// 1. Schritt: bestehenden User aus DB lesen
 if(isset($_GET['id'])){
     $id = (int)$_GET['id'];
     

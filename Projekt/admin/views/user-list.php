@@ -26,13 +26,15 @@
             </thead>
             <tbody>
                 
-                <tr>
-                    <td>1</td>
-                    <td>John Doe</td>
-                    <td>info@example.com</td>
-                    <td><a href="index.php?page=user-edit&id=1" class="btn btn-warning btn-sm">Edit</a></td>
-                    <td><a href="index.php?page=user-list&action=delete&id=1" class="btn btn-danger btn-sm">Delete</a></td>
-                </tr>
+                <?php foreach($data as $row){ ?>
+                    <tr>
+                        <td><?php echo $row['ID']; ?></td>
+                        <td><?php echo $row['email']; ?></td>
+                        <td><?php echo $row['name']; ?></td>
+                        <td><a href="index.php?page=user-list&action=delete&id=<?php echo $row['ID']; ?>">[X]</a></td>
+                        <td><a href="index.php?page=user-edit&id=<?php echo $row['ID']; ?>">[edit]</a></td>
+                    </tr>
+                <?php } ?>
                 
             </tbody>
         </table>
