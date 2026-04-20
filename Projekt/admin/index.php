@@ -112,10 +112,10 @@ if( is_file("scripts/".$page.".php") == true ){
 						<a class="nav-link p-2 <?php echo $page=='dashboard'? 'active':''; ?>" href="index.php?page=dashboard">Dashboard</a>
 					</li>
 					<li class="nav-item col-6 col-md-auto">
-						<a class="nav-link p-2 <?php echo $page=='content'? 'active':''; ?>" href="index.php?page=content">Content</a>
+						<a class="nav-link p-2 <?php echo $page=='content'? 'active':''; ?>" href="index.php?page=content-list">Content</a>
 					</li>
 					<li class="nav-item col-6 col-md-auto">
-						<a class="nav-link p-2 <?php echo $page=='user'? 'active':''; ?>" href="index.php?page=user">Users</a>
+						<a class="nav-link p-2 <?php echo $page=='user'? 'active':''; ?>" href="index.php?page=user-list">Users</a>
 					</li>
 				</ul>
 				<?php } ?>

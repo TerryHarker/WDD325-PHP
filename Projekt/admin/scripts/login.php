@@ -7,7 +7,7 @@ if( isset($_POST['username']) && isset($_POST['password']) ){
     $statement = $db->prepare( $query ); // auzuführender Befehl
     $statement->execute( [$_POST['username']] ); // Daten schicken und ausführen
     $userdata = $statement->fetch( PDO::FETCH_ASSOC ); // Datenabholen
-    print_r($userdata);
+    // print_r($userdata);
 if( 
         $userdata !==false && 
         password_verify($_POST['password'], $userdata['passwort']) === true
