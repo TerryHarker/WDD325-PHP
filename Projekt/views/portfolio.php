@@ -12,7 +12,8 @@
 				<img src="media/<?php echo $portfolio['bild']; ?>">
 				<div class="caption">
 					<h6 class="mt-2 mb-0"><?php echo $portfolio['titel']; ?></h6>
-					<span><?php echo $portfolio['zeit']; ?></span>
+					<span><?php echo $portfolio['zeit']; ?></span><br>
+					<span>Design, Programmierung</span>
 				</div>
 			</div>
 		<?php } ?>
