@@ -13,7 +13,7 @@
 				<div class="caption">
 					<h6 class="mt-2 mb-0"><?php echo $portfolio['titel']; ?></h6>
 					<span><?php echo $portfolio['zeit']; ?></span><br>
-					<span>Design, Programmierung</span>
+					<span><?php echo $portfolio['kategorie']; ?></span>
 				</div>
 			</div>
 		<?php } ?>
