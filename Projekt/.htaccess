@@ -1,0 +1,14 @@
+# Sicherheitsmassnahme für Produktivserver
+# Options -Indexes
+
+# Rewrite muss eingeschaltet sein
+RewriteEngine On
+RewriteBase /WDD325-PHP/Projekt/
+
+# Existierende Dateien und Verzeichnisse ignorieren
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Rewrite /contact  →  index.php?page=contact
+RewriteRule ^([a-zA-Z0-9_-]+)/?$ index.php?page=$1 [L,QSA]
+ 
