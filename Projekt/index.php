@@ -48,6 +48,9 @@ if( is_file("scripts/".$page.".php") == true ){
 		<header class="navbar navbar-expand-md bd-navbar">
 			<nav class="container flex-wrap flex-md-nowrap" aria-label="Main navigation">
 				<a class="navbar-brand p-0 me-2" href="<?php echo BASEURL; ?>">NICO's PORTFOLIO<a>
+				<?php 
+				/*
+				<!-- Nav ohne SEF URLs -->
 				<ul class="navbar-nav flex-row flex-wrap bd-navbar-nav">
 					<li class="nav-item col-6 col-md-auto">
 						<a class="nav-link p-2 <?php echo $page=='home'? 'active':''; ?>" href="index.php?page=home">Home</a>
@@ -57,6 +60,21 @@ if( is_file("scripts/".$page.".php") == true ){
 					</li>
 					<li class="nav-item col-6 col-md-auto">
 						<a class="nav-link p-2 <?php echo $page=='contact'? 'active':''; ?>" href="index.php?page=contact">Contact me</a>
+					</li>
+				</ul>
+				*/
+				?>
+				
+				<!-- nav für SEF URLs -->
+				<ul class="navbar-nav flex-row flex-wrap bd-navbar-nav">
+					<li class="nav-item col-6 col-md-auto">
+						<a class="nav-link p-2 <?php echo $page=='home'? 'active':''; ?>" href="<?php echo BASEURL; ?>">Home</a>
+					</li>
+					<li class="nav-item col-6 col-md-auto">
+						<a class="nav-link p-2 <?php echo $page=='portfolio'? 'active':''; ?>" href="<?php echo BASEURL; ?>portfolio">Portfolio</a>
+					</li>
+					<li class="nav-item col-6 col-md-auto">
+						<a class="nav-link p-2 <?php echo $page=='contact'? 'active':''; ?>" href="<?php echo BASEURL; ?>contact">Contact me</a>
 					</li>
 				</ul>
 			</nav>

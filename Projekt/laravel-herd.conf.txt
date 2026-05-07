@@ -1,0 +1,32 @@
+# Nginx config for Laravel Herd (untested)
+# Place this file as: C:\Users\<your-user>\.config\herd\config\nginx\wdd325-php.conf
+# (adjust the filename to match your site name in Herd)
+
+server {
+    listen 80;
+    server_name wdd325-php.test;
+
+    root "C:/laragon/www/WDD325-PHP/Projekt";
+    index index.php index.html;
+
+    # Sicherheitsmassnahme: directory listings ausschalten
+    autoindex off;
+
+    location / {
+        # ignoriere existierende Dateien und Ordner, rewrite nur für alles andere
+        try_files $uri $uri/ @rewrite;
+    }
+
+    # Rewrite /contact  →  index.php?page=contact
+    location @rewrite {
+        rewrite ^/([a-zA-Z0-9_-]+)/?$ /index.php?page=$1 last;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass "unix:/Users/<your-user>/Library/Application Support/Herd/config/php/83/valet.sock";
+    
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+}
